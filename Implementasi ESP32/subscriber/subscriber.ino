@@ -2,7 +2,7 @@
 #include <PubSubClient.h>
 #include <string.h>
 
-const char* ssid = "Kirana tapi lancar";
+const char* ssid = "wifi_taufiq";
 const char* password = "abcde123";
 const char* mqtt_server = "broker.mqtt-dashboard.com";
 
