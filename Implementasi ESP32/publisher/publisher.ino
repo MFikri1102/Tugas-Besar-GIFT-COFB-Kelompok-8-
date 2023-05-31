@@ -1,7 +1,7 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 
-const char* ssid = "Kirana tapi lancar";
+const char* ssid = "wifi_taufiq"
 const char* password = "abcde123";
 const char* mqtt_server = "broker.mqtt-dashboard.com";
 
@@ -11,6 +11,8 @@ unsigned long lastMsg = 0;
 #define MSG_BUFFER_SIZE (50)
 char msg[MSG_BUFFER_SIZE];
 int value = 0;
+
+char keyArr[17];
 
 // Helper functions
 void swap(byte* a, byte* b) {
@@ -171,6 +173,24 @@ void setup() {
   setup_wifi();
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
+
+  // Generate a random key
+  randomSeed(analogRead(0));
+  for (int i = 0; i < 16; i++) {
+    byte randomValue = random(36);
+    if (randomValue < 10) {
+      keyArr[i] = '0' + randomValue;  // Digit
+    } else {
+      keyArr[i] = 'A' + randomValue - 10;  // Uppercase letter
+    }
+  }
+
+  // Print the generated key
+  Serial.print("Generated Key: ");
+  for (int i = 0; i < 16; i++) {
+    Serial.print((char)keyArr[i]);
+  }
+  Serial.println();
 }
 
 void loop() {
@@ -205,15 +225,10 @@ void loop() {
     original_data_len = data_len;
     Serial.println((char*)plaintext);
 
-    // Prompt the user for the key
-    Serial.print("Enter the key (16 characters): ");
-    while (Serial.available() == 0) {
-      // Wait for user input
-    }
-    String keyInput = Serial.readStringUntil('\n');
-    keyInput.trim();
-    keyInput.toCharArray((char*)key, 17);
-    Serial.println((char*)key);
+    String keyGenerated = String(keyArr);
+    // keyInput.trim();
+    keyGenerated.toCharArray((char*)key, 17);
+    // Serial.println((char*)key);
 
     // Pad data with zeros
     while (data_len % 16 != 0) {
