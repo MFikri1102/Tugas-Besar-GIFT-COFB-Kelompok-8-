@@ -22,14 +22,16 @@ int value = 0;
 PubSubClient client;
 
 // Define the public prime number and base
-long int p = 62319833; // Q public prime number
-long int g = 880507609; // P public base
+long int p = 5483; // Q public prime number
+long int g = 23; // P public base
 
 // Define the private and public keys
 long int b; // private key
 long int B; // public key
 
 long int a;
+
+long int otherPartyKey;
 
 // Define the shared secret key
 long int keyB;
@@ -70,23 +72,36 @@ int calculateLengthByIteration(long long n){
 // A callback function to handle incoming messages from the publisher
 void callback(char* topic, byte* payload, unsigned int length) {
   // Convert the payload to a long int
-  long int otherPartyKey = atol((char*)payload);
+  // Convert the payload to an integer
+  String message = "";
+  for (int i = 0; i < length; i++) {
+    message += (char)payload[i];
+  }
+  otherPartyKey = message.toInt();
+  Serial.print("Received message: ");
+  Serial.println(otherPartyKey);
 
+//  long int otherPartyKey = atol((char*)payload);
+//  Serial.println(otherPartyKey);
   // Compute the shared secret key using the other party's public key and the private key
   if (strcmp(topic, MQTT_TOPIC_ALICE) == 0) {
-    sharedSecretKey = compute(otherPartyKey, a, p);
-  } else if (strcmp(topic, MQTT_TOPIC_BOB) == 0) {
     sharedSecretKey = compute(otherPartyKey, b, p);
+  } else if (strcmp(topic, MQTT_TOPIC_BOB) == 0) {
+    sharedSecretKey = compute(otherPartyKey, a, p);
   }
 
   // Pad the key with zeros if it is less than 17 digits
-  while (calculateLengthByIteration(sharedSecretKey) < 17) {
-    sharedSecretKey *= 10;
-  }
+//  while (calculateLengthByIteration(sharedSecretKey) < 17) {
+//    sharedSecretKey *= 10;
+//  }
 
   // Print the shared secret key
   Serial.print("Shared secret key: ");
   Serial.println(sharedSecretKey);
+
+//  char buffer[20];
+//  sprintf(buffer, "%ld", B);
+//  mqttClient.publish(MQTT_TOPIC_BOB, buffer);
 }
 
 
@@ -108,7 +123,8 @@ void setup() {
   mqttClient.setCallback(callback);
   
   // Choose a random private key between 1 and p-1
-  b = random(1, p-1);
+  b = random(10, p-1);
+  //Serial.printf("\n b = %d \n", b);
   
   // Compute the public key using g and b
   B = compute(g, b, p);
@@ -120,13 +136,13 @@ void loop() {
   if (!mqttClient.connected()) {
     mqttClient.connect("subscriber");
     
-    // Subscribe to the MQTT topic
-    mqttClient.subscribe(MQTT_TOPIC_ALICE, 1);
-    
     // Publish the public key B to the MQTT topic
     char buffer[20];
     sprintf(buffer, "%ld", B);
-    mqttClient.publish(MQTT_TOPIC_BOB, buffer, true);
+    mqttClient.publish(MQTT_TOPIC_BOB, buffer);
+
+    // Subscribe to the MQTT topic
+    mqttClient.subscribe(MQTT_TOPIC_ALICE);
     
     // Print the public key B
     Serial.printf("Bob's public key is %s\n", buffer);
