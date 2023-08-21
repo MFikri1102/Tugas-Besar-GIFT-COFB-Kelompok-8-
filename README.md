@@ -1,2 +1,8 @@
-# Tugas-Besar-GIFT-COFB-Kelompok-8-
-Tugas Besar Kelompok 8 dengan beranggotakan Taufiq Hidayat (13221044), Muhammad Fikri (13221046), Daffa Muhammad Rasyid (13221060)
+# Tugas Besar Kriptografi GIFT-COFT Kelompok 8
+
+Implementasi kriptografi GIFT-COFB pada ESP32 menggunakan protokol MQTT.
+
+Muhammad Ogin Hasanuddin, S.T., M.T.
+13221044 - Taufiq Hidayat
+13221046 - Muhammad Fikri
+13221060 - Daffa Muhammad Rasyid
