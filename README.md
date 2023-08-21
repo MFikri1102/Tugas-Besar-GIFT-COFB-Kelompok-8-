@@ -1,4 +1,4 @@
-# Tugas Besar Kriptografi GIFT-COFT Kelompok 8
+# Tugas Besar Kriptografi GIFT-COFB Kelompok 8
 
 Implementasi kriptografi modifikasi GIFT-COFB pada ESP32 menggunakan protokol MQTT.
 
