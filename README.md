@@ -1,6 +1,6 @@
 # Tugas Besar Kriptografi GIFT-COFT Kelompok 8
 
-Implementasi kriptografi GIFT-COFB pada ESP32 menggunakan protokol MQTT.
+Implementasi kriptografi modifikasi GIFT-COFB pada ESP32 menggunakan protokol MQTT.
 
 Muhammad Ogin Hasanuddin, S.T., M.T.
 13221044 - Taufiq Hidayat
